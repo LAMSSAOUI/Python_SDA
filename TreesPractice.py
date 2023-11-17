@@ -226,9 +226,37 @@ print('inserer la valeur 2 :',inserer(b, 1))
 print('la nouvelle abr b est :', b)
 
 
+# Exo4 Td2
 
 
+def Supression(a,val):
+    if not vide(a) and existVal(a, val):
+        if Racine(a)==val:
+            if estFeuille(a):
+                a.clear()
+            else :
+                if vide(FilsGauche(a)):
+                    v=FilsDroite(a)
+                    a[:] = v
+                elif vide(FilsDroite(a)):
+                    v = FilsGauche(a)
+                    a[:]=v
+                else :
+                    m = plusGrand(FilsGauche(a))
+                    print('m =',m)
+                    a[0] = m
+                    Supression(FilsGauche(a),m)
+        elif Racine(a) > val:
+            Supression(FilsGauche(a), val)
+        else :
+            Supression(FilsDroite(a), val)
+    else :
+        return None        
 
+d = [7,[5,[2,[],[]],[6,[],[]]],[18,[17,[],[]],[19,[],[]]]]
+
+print("Suppression de la valeur 2 ",Supression(d, 7))
+print('la nouvelle c est : ',d)
 
 
 
