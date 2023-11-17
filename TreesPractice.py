@@ -174,6 +174,58 @@ print('la valeur de a est :',Evaluer(b))
 
 
 
+#Exo3 Td2
+
+b = [7,[5,[2,[],[]],[6,[],[]]],[18,[17,[],[]],[19,[],[]]]]
+
+def existVal(a , val):
+    if vide(a):
+        return False
+    if Racine(a) == val:
+        return True
+    if val<Racine(a):
+        return existVal(FilsGauche(a), val)
+    else:
+        return existVal(FilsDroite(a), val)
+
+print('est ce que la valeur 18 existe dans cette abr ',existVal(b, 18))   
+
+
+def plusGrand(a) :
+    if vide(a):
+        return None
+    elif vide(FilsDroite(a)):
+        return Racine(a)
+    else:
+        return plusGrand(FilsDroite(a))
+                
+        
+print('le plus grand element est', plusGrand(b))  
+
+def plusPetit(a):
+    if vide(a):
+        return None
+    elif vide(FilsGauche(a)):
+        return Racine(a)
+    else :
+        return plusPetit(FilsGauche(a))
+
+print('le plus petit element est :',plusPetit(b))
+
+
+def inserer(a,val):
+    if vide(a):
+        a.extend([val,[],[]])
+    elif val<Racine(a):
+        return inserer(FilsGauche(a), val)   
+    else:
+        return inserer(FilsDroite(a),val)
+
+
+print('inserer la valeur 2 :',inserer(b, 1))
+print('la nouvelle abr b est :', b)
+
+
 
 
 
