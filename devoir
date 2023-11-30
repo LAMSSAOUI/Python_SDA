@@ -1,0 +1,111 @@
+def vide(tree):
+    if  len(tree)==0:
+        return True 
+    return False
+
+
+def FilsGauche(a) :
+    if not vide(a):
+        return a[1]
+    return None
+
+# print('fils gauche de l arbre a est :',FilsGauche(a))
+
+def FilsDroite(a):
+    if not vide(a):
+        return a[2]
+    return None
+
+
+def frequences(liste):
+    frequence = []
+    unique = []
+    for i in liste:
+        if i not in unique:
+            unique.append(i)
+            frequence.append((i, 1))
+        else:
+            index = unique.index(i)
+            frequence[index] = (i, frequence[index][1] + 1)
+    return frequence
+
+
+def tri(frequences):
+    if len(frequences) <= 1:
+        return frequences
+
+    pivot = frequences[len(frequences) // 2]
+    gauche = [x for x in frequences if x[1] < pivot[1]]
+    milieu = [x for x in frequences if x[1] == pivot[1]]
+    droit = [x for x in frequences if x[1] > pivot[1]]
+
+    return tri(gauche) + milieu + tri(droit)
+
+
+def insere(f, t):
+    for i in range(len(f)):
+        if f[i][1] > t[1]:
+            f.insert(i, t)
+            break
+    else:
+        f.append(t)
+
+
+def arbre_huffman(liste):
+    if len(liste) == 1:
+        return liste[0][0]
+    else:
+        gauche = [liste[0][0], [], []] if type(liste[0][0]) is int else liste[0][0]
+        droit = [liste[1][0], [], []] if type(liste[1][0]) is int else liste[1][0]
+
+        a = [liste[0][1] + liste[1][1], gauche, droit]
+        liste[:] = liste[2:]
+        insere(liste, (a, a[0]))
+        return arbre_huffman(liste)
+
+
+def codes_huffman(arbre, code, codesH):
+        if len(arbre[1]) == 0 and len(arbre[2]) == 0:
+            codesH.update({arbre[0]: code})
+        else:
+            codes_huffman(FilsGauche(arbre), code + '0', codesH)
+            codes_huffman(FilsDroite(arbre), code + '1', codesH)
+        return codesH
+
+def compress(liste, codesH):
+    chaine = ''
+    for item in liste:
+        chaine += codesH[item]
+    return chaine
+
+
+def decompress(codesH, string):
+    result = []
+    current_code = ''
+
+    for char in string:
+        current_code += char
+        for key, value in codesH.items():
+            if value == current_code:
+                result.append(key)
+                current_code = ''
+                break
+
+    return result
+
+L = [12,29,55,29,31,8,12,46,29,8,12,29,31,29,8,29,8] 
+print('la liste est :',L)
+F = frequences(L)
+print('la liste avec la frequence de chaque nombre :',F)
+print('la creation de l arbre ')
+arbre = arbre_huffman(F)
+print('l arbre est : ',arbre)
+print('la creation de dictionaire')
+codesH = {}
+objCodes = codes_huffman(arbre, '', codesH)
+print('le dictionnaire est :',objCodes)
+print('la compression de la liste ')
+com = compress(L,objCodes)
+print('la liste compresse est : ', com)
+decomp = decompress(objCodes,com)
+print('la liste decompresse ',decomp)
