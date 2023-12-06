@@ -1,0 +1,177 @@
+# 1          / 8 bits
+
+# 2
+dec = {'A':'00', 'C':'01', 'G':'10', 'T':'11'}
+
+
+# 3
+def prefixe(M,S):
+    if M !="" and S!="":
+        n=len(M)
+        if n<len(S):
+            for i in range(0,n):
+                if M[i]!=S[i]:
+                    return False
+            return True
+        return False
+        
+# print(prefixe('Tt','Ttstrzera'))
+# print(prefixe('Tdsatgt','Ttstrzera'))
+
+# 4 la longueur de la chaine M
+# 5
+
+def list_suffixes(S):
+    if S!='':
+        L=[]
+        n=len(S)
+        for i in range(0,n):
+            suffix=S[i:]
+            L.append((suffix,i))
+        return L
+    
+# print(list_suffixes('TATCTAGCTA'))
+
+L=list_suffixes('TATCTAGCTA')
+
+def creation_du_tas(L,n,i):
+    maxVal=i
+    left = 2 * i +1
+    right = 2 * i + 2
+
+    if left < n and L[maxVal][0] < L[left][0]:
+        maxVal=left
+    if right < n and L[maxVal][0] < L[right][0]:
+        maxVal=right
+    
+    if maxVal != i:
+        L[i],L[maxVal] = L[maxVal], L[i]
+        creation_du_tas(L,n,maxVal)
+
+def tri_par_tas(L):
+    n=len(L)
+    indice=n//2-1
+    for i in range(indice,-1,-1):
+        creation_du_tas(L,n,i)
+
+    for i in range(n-1,0,-1):
+        L[i], L[0] = L[0], L[i]
+        creation_du_tas(L,i,0)
+    return L
+
+# L.append(('ABDE',6))
+# L.append(('ABCDE',6))
+print()
+# print(tri_par_tas(L))
+
+
+def recherche_dichotomique(M,L):
+    deb = 0
+    fin = len(L)-1
+    while deb<=fin:
+        milieu = (fin+deb)//2
+        # print("milieu",milieu)
+        if prefixe(M,L[milieu][0]) :
+            return  L[milieu][1]
+        elif M>L[milieu][0]:
+            deb=milieu+1
+        else:
+            fin=milieu-1
+    return None
+            
+
+L1 = tri_par_tas(L)        
+# print(recherche_dichotomique('CTA',L1))
+# print(recherche_dichotomique('TA',L1))
+# print(recherche_dichotomique('CAGT',L1))
+
+
+#8 la complexité est O(Mlog(L))
+
+
+
+def Vide(node):
+    return len(node) == 0 if isinstance(node, list) else True
+
+
+
+def Val(node):
+    return node[0] if isinstance(node[1], list) else node
+
+def EstFeuille(L):
+    if not Vide(L):
+        if Vide(L[1]):
+            return True
+        return False
+    return False
+
+
+
+R=['#',[['A',[[9,[]],['GCTA',[[5,[]]]],['TCTAGCTA',[[1,[]]]]]],['CTA',[[7,[]],['GCTA',[[3,[]]]]]],['GCTA',[[6,[]]]],['T', [['A', [[8,[]] , ['GCTA',[[4,[]]]] , ['TCTAGCTA',[[0,[]]]]]],['CTAGCTA',[[2,[]]]]]]]]
+def feuilles(R):
+    L=[]
+    if not Vide(R):
+        if EstFeuille(R):
+            L.append(Val(R))
+        else:
+            n=len(R[1])
+            for i in range(0,n):
+                sub_leaves = feuilles(R[1][i])
+                L.extend(sub_leaves)
+    return L
+
+result = feuilles(R)
+print('Final result:', result)
+
+
+def recherche_arbre(S, R):
+    j = 0
+    positions = []
+    for i in range(len(R)):
+        if R[i] == S[j]:
+            pos = i
+            for k in range(i, len(R)):
+                if R[k] == S[j]:
+                    j += 1
+                    if j == len(S):
+                        positions.append(pos)
+                        j = 0  
+                        break
+                else:
+                    j = 0  
+                    break
+            else:
+                continue
+        else:
+            j = 0  
+            continue
+
+    return positions if positions else False
+
+pos = recherche_arbre('TA', 'TATCTAGCTA')
+print('la position de TA est :', pos)
+   
+
+
+def matrice(P, Q):
+    a = len(P)
+    b = len(Q)
+    M = [[0] * b for _ in range(a)]
+
+    for i in range(a):
+        for j in range(b):
+            if P[i] == Q[j]:
+                M[i][j] = 1 + M[i - 1][j - 1] if i > 0 and j > 0 else 1
+
+    return M
+
+P = 'GCTAGCATTT'
+Q = 'CATTGTAGCT'
+
+m = matrice(P, Q)
+print('la matrice est :', m)
+
+      
+                
+# prendre la maximum valeur 
+# boucler prendre les valeur d'avant 
