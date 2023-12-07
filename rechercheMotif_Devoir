@@ -175,3 +175,24 @@ print('la matrice est :', m)
                 
 # prendre la maximum valeur 
 # boucler prendre les valeur d'avant 
+
+def plus_long_mc(P,M):
+    L=[]
+    for row in M :
+        L.append(max(row))
+        
+    v = max(L)
+    
+    if v == 0 :
+        return []   
+    
+    C = []
+    for i, val in enumerate(L):
+        if val == v:
+            start = i - v+1 
+            end = i+1 
+            res = P[start:end]
+            C.append(res)
+
+    return list(set(C))   
+print(plus_long_mc('GCTAGCATT', matrice('GCTAGCATT', 'CATTGTAGCT' ))) 
